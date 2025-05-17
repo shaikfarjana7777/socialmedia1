@@ -1,0 +1,36 @@
+{% extends 'core/base.html' %}
+
+{% block content %}
+<div class="card">
+    <h2>Search Users</h2>
+    <form method="GET" action="{% url 'search' %}">
+        <div style="display: flex;">
+            <input type="text" name="q" value="{{ query }}" placeholder="Search by username or email" style="flex: 1; padding: 8px; border: 1px solid #ddd; border-radius: 4px 0 0 4px;">
+            <button type="submit" class="btn btn-primary" style="border-radius: 0 4px 4px 0;">Search</button>
+        </div>
+    </form>
+</div>
+
+{% if query %}
+    <div class="card">
+        <h3>Results for "{{ query }}"</h3>
+        
+        {% if users %}
+            <ul style="list-style: none;">
+                {% for user in users %}
+                    <li style="padding: 10px 0; border-bottom: 1px solid #eee; display: flex; align-items: center;">
+                        <img src="{{ user.profile_pic.url }}" style="width: 40px; height: 40px; border-radius: 50%; object-fit: cover;">
+                        <div style="margin-left: 10px; flex: 1;">
+                            <a href="{% url 'profile' user.username %}"><strong>{{ user.username }}</strong></a>
+                            <p style="margin: 0; color: #666;">{{ user.email }}</p>
+                        </div>
+                        <a href="{% url 'profile' user.username %}" class="btn btn-primary">View Profile</a>
+                    </li>
+                {% endfor %}
+            </ul>
+        {% else %}
+            <p>No users found.</p>
+        {% endif %}
+    </div>
+{% endif %}
+{% endblock %}

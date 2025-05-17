@@ -1,0 +1,16 @@
+{% extends 'core/base.html' %}
+
+{% block content %}
+<div class="card">
+    <h2>Welcome to Social Media</h2>
+    <p>See what's happening with your friends</p>
+</div>
+
+{% for post in posts %}
+    {% include 'core/_post.html' %}
+{% empty %}
+    <div class="card">
+        <p>No posts to show. Follow some people or create your own post!</p>
+    </div>
+{% endfor %}
+{% endblock %}

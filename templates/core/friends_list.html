@@ -1,0 +1,211 @@
+{% extends 'core/base.html' %}
+
+{% block content %}
+<style>
+    .friends-container {
+        max-width: 800px;
+        margin: 2rem auto;
+        padding: 0 1rem;
+    }
+
+    .friends-header {
+        margin-bottom: 2rem;
+        padding-bottom: 1rem;
+        border-bottom: 1px solid #eaeaea;
+        position: relative;
+    }
+
+    .friends-header h1 {
+        font-size: 1.8rem;
+        font-weight: 600;
+        color: #333;
+        text-align: center;
+        margin: 0;
+    }
+
+    .friends-header a {
+        position: absolute;
+        left: 0;
+        top: 50%;
+        transform: translateY(-50%);
+        color: #1877f2;
+        text-decoration: none;
+        font-size: 0.95rem;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+
+    .friends-header a:hover {
+        text-decoration: underline;
+    }
+
+    .friends-list {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+        gap: 1.5rem;
+        margin-top: 1.5rem;
+    }
+
+    .friend-card {
+        background: #fff;
+        border-radius: 10px;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        padding: 1.5rem;
+        display: flex;
+        flex-direction: column;
+        transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .friend-card:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    }
+
+    .friend-info {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        margin-bottom: 1rem;
+    }
+
+    .profile-pic-medium {
+        width: 60px;
+        height: 60px;
+        border-radius: 50%;
+        object-fit: cover;
+        border: 2px solid #f0f2f5;
+    }
+
+    .friend-details {
+        flex: 1;
+    }
+
+    .friend-details h3 {
+        margin: 0;
+        font-size: 1.1rem;
+        font-weight: 600;
+    }
+
+    .friend-details a {
+        color: #333;
+        text-decoration: none;
+    }
+
+    .friend-details a:hover {
+        text-decoration: underline;
+        color: #1877f2;
+    }
+
+    .bio {
+        margin: 0.3rem 0 0;
+        color: #65676b;
+        font-size: 0.9rem;
+        line-height: 1.4;
+    }
+
+    .friend-actions {
+        margin-top: auto;
+        display: flex;
+        justify-content: flex-end;
+    }
+
+    .btn {
+        padding: 0.5rem 1rem;
+        border-radius: 6px;
+        font-size: 0.9rem;
+        font-weight: 500;
+        cursor: pointer;
+        transition: all 0.2s ease;
+        border: none;
+    }
+
+    .btn-danger {
+        background-color: #ff4444;
+        color: white;
+    }
+
+    .btn-danger:hover {
+        background-color: #cc0000;
+    }
+
+    .btn-primary {
+        background-color: #1877f2;
+        color: white;
+    }
+
+    .btn-primary:hover {
+        background-color: #166fe5;
+    }
+
+    .no-friends {
+        text-align: center;
+        padding: 3rem 0;
+        grid-column: 1 / -1;
+    }
+
+    .no-friends p {
+        color: #65676b;
+        font-size: 1.1rem;
+        margin-bottom: 1.5rem;
+    }
+
+    @media (max-width: 768px) {
+        .friends-list {
+            grid-template-columns: 1fr;
+        }
+        
+        .friends-header h1 {
+            font-size: 1.5rem;
+            padding-left: 2rem;
+        }
+    }
+</style>
+
+<div class="friends-container">
+    <div class="friends-header">
+        <a href="{% url 'profile' profile_user.username %}">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M19 12H5M12 19l-7-7 7-7"/>
+            </svg>
+            Back to Profile
+        </a>
+        <h1>{{ profile_user.username }}'s Friends ({{ friends|length }})</h1>
+    </div>
+    
+    <div class="friends-list">
+        {% if friends %}
+            {% for friend in friends %}
+            <div class="friend-card">
+                <div class="friend-info">
+                    <img src="{{ friend.profile_pic.url }}" class="profile-pic-medium" alt="{{ friend.username }}">
+                    <div class="friend-details">
+                        <a href="{% url 'profile' friend.username %}">
+                            <h3>{{ friend.username }}</h3>
+                        </a>
+                        {% if friend.bio %}
+                        <p class="bio">{{ friend.bio|truncatechars:60 }}</p>
+                        {% endif %}
+                    </div>
+                </div>
+                {% if is_own_profile %}
+                <div class="friend-actions">
+                    <form method="POST" action="{% url 'remove_friend' friend.username %}">
+                        {% csrf_token %}
+                        <button type="submit" class="btn btn-danger">Remove Friend</button>
+                    </form>
+                </div>
+                {% endif %}
+            </div>
+            {% endfor %}
+        {% else %}
+            <div class="no-friends">
+                <p>No friends yet.</p>
+                {% if is_own_profile %}
+                <a href="{% url 'search' %}" class="btn btn-primary">Find Friends</a>
+                {% endif %}
+            </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

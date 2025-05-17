@@ -1,0 +1,137 @@
+{% extends 'core/base.html' %}
+
+{% block content %}
+<style>
+    .profile-header {
+        display: flex;
+        align-items: center;
+        gap: 30px;
+        margin-bottom: 25px;
+        padding: 20px;
+        background-color: #fff;
+        border-radius: 10px;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+    
+    .profile-pic-large {
+        width: 150px;
+        height: 150px;
+        border-radius: 50%;
+        object-fit: cover;
+        border: 3px solid #f0f2f5;
+    }
+    
+    .profile-info {
+        flex: 1;
+    }
+    
+    .profile-username {
+        font-size: 28px;
+        font-weight: bold;
+        margin-bottom: 10px;
+    }
+    
+    .profile-bio {
+        font-size: 16px;
+        color: #65676b;
+        margin-bottom: 20px;
+        line-height: 1.4;
+    }
+    
+    .profile-actions {
+        display: flex;
+        gap: 10px;
+        margin-top: 15px;
+    }
+    
+    .btn {
+        padding: 8px 16px;
+        border-radius: 4px;
+        border: none;
+        cursor: pointer;
+        font-weight: 500;
+        text-decoration: none;
+        display: inline-block;
+        text-align: center;
+    }
+    
+    .btn-primary {
+        background-color: #1877f2;
+        color: white;
+    }
+    
+    .btn-secondary {
+        background-color: #e4e6eb;
+        color: #050505;
+    }
+    
+    .btn-danger {
+        background-color: #dc3545;
+        color: white;
+    }
+    
+    .posts-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin: 30px 0 15px;
+    }
+    
+    .posts-title {
+        font-size: 20px;
+        font-weight: bold;
+    }
+    
+    .friends-count {
+        font-size: 14px;
+        margin-left: 5px;
+        color: #65676b;
+    }
+</style>
+
+<div class="card profile-header">
+    <img src="{{ profile_user.profile_pic.url }}" class="profile-pic-large" alt="{{ profile_user.username }}">
+    
+    <div class="profile-info">
+        <h1 class="profile-username">{{ profile_user.username }}</h1>
+        <p class="profile-bio">{{ profile_user.bio }}</p>
+        
+        <div class="profile-actions">
+            {% if is_own_profile %}
+                <a href="{% url 'edit_profile' %}" class="btn btn-primary">Edit Profile</a>
+                <a href="{% url 'friends_list' profile_user.username %}" class="btn btn-secondary">
+                    Friends <span class="friends-count">({{ friends_count }})</span>
+                </a>
+                <a href="{% url 'friend_requests' %}" class="btn btn-secondary">Friend Requests</a>
+            {% else %}
+                {% if is_friend %}
+                    <form method="POST" action="{% url 'remove_friend' profile_user.username %}" style="display: inline;">
+                        {% csrf_token %}
+                        <button type="submit" class="btn btn-danger">Remove Friend</button>
+                    </form>
+                {% else %}
+                    <form method="POST" action="{% url 'send_friend_request' profile_user.username %}" style="display: inline;">
+                        {% csrf_token %}
+                        <button type="submit" class="btn btn-primary">Add Friend</button>
+                    </form>
+                {% endif %}
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+<div class="posts-header">
+    <h2 class="posts-title">Posts</h2>
+    {% if is_own_profile %}
+        <a href="{% url 'create_post' %}" class="btn btn-primary">Create Post</a>
+    {% endif %}
+</div>
+
+{% for post in posts %}
+    {% include 'core/_post.html' %}
+{% empty %}
+    <div class="card">
+        <p>No posts to show.</p>
+    </div>
+{% endfor %}
+{% endblock %}

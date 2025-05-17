@@ -1,0 +1,203 @@
+<div class="card post-card">
+    <!-- Post Header -->
+    <div class="post-header">
+        <img src="{{ post.user.profile_pic.url }}" class="post-profile-pic" alt="{{ post.user.username }}">
+        <div class="post-user-info">
+            <a href="{% url 'profile' post.user.username %}"><strong>{{ post.user.username }}</strong></a>
+            <div class="post-time">{{ post.created_at|timesince }} ago</div>
+        </div>
+    </div>
+    
+    <!-- Post Content -->
+    <div class="post-content">
+        <p>{{ post.content }}</p>
+        
+        {% if post.image %}
+            <img src="{{ post.image.url }}" class="post-image">
+        {% endif %}
+    </div>
+    
+    <!-- Post Actions -->
+    <div class="post-actions">
+        <form method="POST" action="{% url 'like_post' post.id %}">
+            {% csrf_token %}
+            <button type="submit" class="like-btn">
+                👍 <span class="like-count">{{ post.likes.count }}</span>
+            </button>
+        </form>
+        
+        <button class="comment-toggle-btn" data-post-id="{{ post.id }}">
+            💬 <span class="comment-count">{{ post.comments.count }}</span>
+        </button>
+    </div>
+    
+    <!-- Comment Section (Initially Hidden) -->
+    <div class="comment-section" id="comments-{{ post.id }}" style="display: none;">
+        <!-- Comment Form -->
+        <form method="POST" action="{% url 'add_comment' post.id %}" class="comment-form">
+            {% csrf_token %}
+            <input type="text" name="content" placeholder="Write a comment..." required>
+            <button type="submit" class="comment-submit-btn">Post</button>
+        </form>
+        
+        <!-- Comments List -->
+        <div class="comments-list">
+            {% for comment in post.comments.all %}
+                <div class="comment">
+                    <img src="{{ comment.user.profile_pic.url }}" class="comment-pic">
+                    <div class="comment-content">
+                        <a href="{% url 'profile' comment.user.username %}"><strong>{{ comment.user.username }}</strong></a>
+                        <p>{{ comment.content }}</p>
+                        <small>{{ comment.created_at|timesince }} ago</small>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+
+<style>
+    .post-card {
+        margin-bottom: 20px;
+        padding: 15px;
+        border-radius: 8px;
+        box-shadow: 0 1px 2px rgba(0,0,0,0.1);
+    }
+    
+    .post-header {
+        display: flex;
+        align-items: center;
+        margin-bottom: 12px;
+    }
+    
+    .post-profile-pic {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        object-fit: cover;
+    }
+    
+    .post-user-info {
+        margin-left: 10px;
+    }
+    
+    .post-user-info a {
+        color: #333;
+        text-decoration: none;
+    }
+    
+    .post-user-info a:hover {
+        text-decoration: underline;
+    }
+    
+    .post-time {
+        font-size: 0.8em;
+        color: #666;
+    }
+    
+    .post-content {
+        margin-bottom: 12px;
+    }
+    
+    .post-image {
+        max-width: 100%;
+        margin: 10px 0;
+        border-radius: 8px;
+    }
+    
+    .post-actions {
+        display: flex;
+        gap: 15px;
+        padding: 8px 0;
+        border-top: 1px solid #eee;
+        border-bottom: 1px solid #eee;
+    }
+    
+    .like-btn, .comment-toggle-btn {
+        background: none;
+        border: none;
+        color: #666;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        gap: 5px;
+        padding: 5px 10px;
+        border-radius: 4px;
+    }
+    
+    .like-btn:hover, .comment-toggle-btn:hover {
+        background-color: #f0f2f5;
+    }
+    
+    .comment-section {
+        margin-top: 15px;
+        padding-top: 15px;
+    }
+    
+    .comment-form {
+        display: flex;
+        margin-bottom: 15px;
+    }
+    
+    .comment-form input {
+        flex: 1;
+        padding: 8px;
+        border: 1px solid #ddd;
+        border-radius: 4px 0 0 4px;
+    }
+    
+    .comment-submit-btn {
+        padding: 8px 15px;
+        background-color: #1877f2;
+        color: white;
+        border: none;
+        border-radius: 0 4px 4px 0;
+        cursor: pointer;
+    }
+    
+    .comment {
+        display: flex;
+        gap: 10px;
+        margin-bottom: 12px;
+        padding: 10px;
+        background-color: #f0f2f5;
+        border-radius: 8px;
+    }
+    
+    .comment-pic {
+        width: 32px;
+        height: 32px;
+        border-radius: 50%;
+        object-fit: cover;
+    }
+    
+    .comment-content {
+        flex: 1;
+    }
+    
+    .comment-content p {
+        margin: 5px 0;
+    }
+    
+    .comment-content small {
+        color: #666;
+        font-size: 0.8em;
+    }
+</style>
+
+<script>
+document.querySelectorAll('.comment-toggle-btn').forEach(btn => {
+    btn.addEventListener('click', function() {
+        const postId = this.getAttribute('data-post-id');
+        const commentSection = document.getElementById(`comments-${postId}`);
+        
+        if (commentSection.style.display === 'none') {
+            commentSection.style.display = 'block';
+            this.innerHTML = '💬 <span class="comment-count">{{ post.comments.count }}</span> (Hide)';
+        } else {
+            commentSection.style.display = 'none';
+            this.innerHTML = '💬 <span class="comment-count">{{ post.comments.count }}</span>';
+        }
+    });
+});
+</script>

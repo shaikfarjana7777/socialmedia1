@@ -1,0 +1,68 @@
+{% extends 'core/base.html' %}
+
+{% block content %}
+<div class="container">
+    <h1>Friend Requests</h1>
+    
+    <!-- Received Requests Section -->
+    <div class="requests-section">
+        <h2>Received Requests</h2>
+        {% if received_requests %}
+            <div class="request-list">
+                {% for request in received_requests %}
+                <div class="request-card">
+                    <div class="request-user">
+                        <img src="{{ request.from_user.profile_pic.url }}" class="profile-pic-medium">
+                        <div class="user-info">
+                            <a href="{% url 'profile' request.from_user.username %}">
+                                <h3>{{ request.from_user.username }}</h3>
+                            </a>
+                            <small>{{ request.created_at|timesince }} ago</small>
+                        </div>
+                    </div>
+                    <div class="request-actions">
+                        <form method="POST" action="{% url 'accept_friend_request' request.id %}">
+                            {% csrf_token %}
+                            <button type="submit" class="btn btn-success">Accept</button>
+                        </form>
+                        <form method="POST" action="{% url 'reject_friend_request' request.id %}">
+                            {% csrf_token %}
+                            <button type="submit" class="btn btn-danger">Reject</button>
+                        </form>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        {% else %}
+            <p>No pending friend requests.</p>
+        {% endif %}
+    </div>
+    
+    <!-- Sent Requests Section -->
+    <div class="requests-section">
+        <h2>Sent Requests</h2>
+        {% if sent_requests %}
+            <div class="request-list">
+                {% for request in sent_requests %}
+                <div class="request-card">
+                    <div class="request-user">
+                        <img src="{{ request.to_user.profile_pic.url }}" class="profile-pic-medium">
+                        <div class="user-info">
+                            <a href="{% url 'profile' request.to_user.username %}">
+                                <h3>{{ request.to_user.username }}</h3>
+                            </a>
+                            <small>{{ request.created_at|timesince }} ago</small>
+                        </div>
+                    </div>
+                    <div class="request-status">
+                        <span class="badge">Pending</span>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        {% else %}
+            <p>No sent friend requests.</p>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}
