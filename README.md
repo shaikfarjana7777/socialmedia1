@@ -122,5 +122,52 @@ user_logout(request)
 
        Friendship: Represents confirmed friendships between users.
 
+🛠️ Technologies Used
+     
+     Python 3
 
+     Django 4
 
+     SQLite (default database)
+
+     HTML/CSS
+
+     Pillow (for image upload)
+
+🛠️ Installation Steps     
+
+     ✅ 1. Install Python
+          If you don’t have Python installed:
+
+          Download from: https://www.python.org/downloads/
+
+          Install Python and now check with python --version
+
+      ✅ 2. Install Django    
+            Install Django using pip:
+                  "pip install django"
+                  "django-admin --version"
+
+       ✅ 3. Create a New Django Project           
+                  django-admin startproject projectname
+                  cd projectname
+
+        ✅ 4. Create a Django App    
+                  python manage.py startapp appname
+                  
+         ✅ 6. Install Required Packages
+                  Pillow>=9.0.0
+         
+         ✅ 7. Apply Database Migrations
+                 Create the database tables:
+
+                    python manage.py makemigrations
+                    python manage.py migrate
+
+         ✅ 9. Run the Server  
+                   Start the Django development server:
+                         python manage.py runserver
+          
+          Open your browser and go to:
+
+                    http://127.0.0.1:8000/
