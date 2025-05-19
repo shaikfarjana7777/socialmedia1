@@ -1,20 +1,132 @@
 {% extends 'core/base.html' %}
+{% load static %}
 
 {% block content %}
-<div class="card">
-    <h2>Login</h2>
-    <form method="POST">
-        {% csrf_token %}
-        <div class="form-group">
-            <label for="username">Username</label>
-            <input type="text" id="username" name="username" required>
+<style>
+    body, html {
+        height: 100%;
+        margin: 0;
+        font-family: 'Segoe UI', sans-serif;
+        background: linear-gradient(135deg, #feda75, #fa7e1e, #d62976, #962fbf, #4f5bd5);
+        background-size: 400% 400%;
+        animation: gradientMove 15s ease infinite;
+    }
+
+    @keyframes gradientMove {
+        0% {background-position: 0% 50%;}
+        50% {background-position: 100% 50%;}
+        100% {background-position: 0% 50%;}
+    }
+
+    .center-container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh; 
+        padding-top: 20px;
+    }
+
+    .card {
+        padding: 2.5rem;
+        box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+        border-radius: 16px;
+        background-color: white;
+        width: 400px;
+        min-height: 350px; 
+        animation: fadeIn 0.8s ease;
+    }
+
+    @keyframes fadeIn {
+        from { opacity: 0; transform: translateY(20px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+
+    .form-group {
+        margin-bottom: 1.2rem;
+    }
+
+    .form-group label {
+        display: block;
+        margin-bottom: 0.4rem;
+        font-weight: 600;
+    }
+
+    .form-group input {
+        width: 100%;
+        padding: 0.6rem;
+        border: 1px solid #ccc;
+        border-radius: 8px;
+        transition: border-color 0.3s;
+    }
+
+    .form-group input:focus {
+        border-color: #962fbf;
+        outline: none;
+    }
+
+    .btn {
+        width: 100%;
+        padding: 0.6rem;
+        background: linear-gradient(90deg, #feda75, #fa7e1e, #d62976, #962fbf, #4f5bd5);
+        border: none;
+        border-radius: 8px;
+        color: white;
+        font-weight: bold;
+        cursor: pointer;
+        transition: background 0.3s;
+    }
+
+    .btn:hover {
+        opacity: 0.9;
+    }
+
+    .logo-img {
+        width: 100%;
+        height: auto;
+        max-height: 120px;
+        object-fit: contain; 
+        margin-bottom: 1rem;
+    }
+
+    .signup-link {
+        text-align: center;
+        margin-top: 1rem;
+        font-size: 14px;
+    }
+
+    .signup-link a {
+        color: #d62976;
+        text-decoration: none;
+        font-weight: bold;
+    }
+
+    .signup-link a:hover {
+        text-decoration: underline;
+    }
+</style>
+
+<div class="center-container">
+    <div class="card">
+        <div style="text-align: center;">
+            <img src="{% static 'assets/instalogo.png' %}" alt="Login" class="logo-img">
         </div>
-        <div class="form-group">
-            <label for="password">Password</label>
-            <input type="password" id="password" name="password" required>
+
+        <form method="POST">
+            {% csrf_token %}
+            <div class="form-group">
+                <label for="username">Username</label>
+                <input type="text" id="username" name="username" required>
+            </div>
+            <div class="form-group">
+                <label for="password">Password</label>
+                <input type="password" id="password" name="password" required>
+            </div>
+            <button type="submit" class="btn">Login</button>
+        </form>
+
+        <div class="signup-link">
+            <p>Don't have an account? <a href="{% url 'signup' %}">Sign up</a></p>
         </div>
-        <button type="submit" class="btn btn-primary">Login</button>
-    </form>
-    <p>Don't have an account? <a href="{% url 'signup' %}">Sign up</a></p>
+    </div>
 </div>
 {% endblock %}

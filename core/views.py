@@ -59,7 +59,7 @@ def user_logout(request):
 
 @login_required
 def index(request):
-    # Get posts from friends and public posts
+
     friends = Friendship.objects.filter(
         Q(user1=request.user) | Q(user2=request.user)
     ).values_list('user1', 'user2')
@@ -81,13 +81,13 @@ def index(request):
     }
     return render(request, 'core/index.html', context)
 
-# core/views.py
+
 @login_required
 def friends_list_view(request, username):
     user = get_object_or_404(User, username=username)
     is_own_profile = (request.user == user)
     
-    # Get all friends
+    
     friendships = Friendship.objects.filter(
         Q(user1=user) | Q(user2=user)
     )
@@ -106,12 +106,11 @@ def friends_list_view(request, username):
 
 @login_required
 def friend_requests_view(request):
-    # Get all pending friend requests for the current user
+
     received_requests = FriendRequest.objects.filter(
         to_user=request.user
     ).select_related('from_user')
     
-    # Get all friend requests sent by the current user
     sent_requests = FriendRequest.objects.filter(
         from_user=request.user
     ).select_related('to_user')
@@ -127,10 +126,9 @@ def profile(request, username):
     user = get_object_or_404(User, username=username)
     posts = Post.objects.filter(user=user)
     
-    # Check if the profile is of the logged-in user
     is_own_profile = user == request.user
     profile_user = get_object_or_404(User, username=username)
-    # Check friendship status
+
     is_friend = Friendship.objects.filter(
         Q(user1=request.user, user2=user) | 
         Q(user1=user, user2=request.user)
@@ -139,7 +137,6 @@ def profile(request, username):
     Q(user1=profile_user) | Q(user2=profile_user)
 ).count()
 
-    # Check if friend request exists
     friend_request_sent = FriendRequest.objects.filter(
         from_user=request.user, to_user=user).exists()
     
@@ -148,7 +145,6 @@ def profile(request, username):
         to_user=request.user
     )
     
-    # Determine which posts to show
     if is_own_profile:
         visible_posts = posts
     elif is_friend:
@@ -188,6 +184,10 @@ def create_post(request):
     if request.method == 'POST':
         content = request.POST.get('content')
         image = request.FILES.get('image')
+
+        video = request.FILES.get('video')
+
+
         privacy = request.POST.get('privacy', 'public')
         
         if not content and not image:
@@ -198,6 +198,9 @@ def create_post(request):
             user=request.user,
             content=content,
             image=image,
+
+            video=video,
+
             privacy=privacy
         )
         messages.success(request, "Post created successfully")
@@ -257,7 +260,6 @@ def search(request):
 def send_friend_request(request, username):
     to_user = get_object_or_404(User, username=username)
     
-    # Check if already friends
     if Friendship.objects.filter(
         Q(user1=request.user, user2=to_user) | 
         Q(user1=to_user, user2=request.user)
@@ -265,20 +267,16 @@ def send_friend_request(request, username):
         messages.error(request, "You are already friends")
         return redirect('profile', username=username)
     
-    # Check if request already exists
     if FriendRequest.objects.filter(from_user=request.user, to_user=to_user).exists():
         messages.error(request, "Friend request already sent")
         return redirect('profile', username=username)
     
-    # Check if reverse request exists
     reverse_request = FriendRequest.objects.filter(from_user=to_user, to_user=request.user).first()
     if reverse_request:
-        # Accept the reverse request
         Friendship.objects.create(user1=request.user, user2=to_user)
         reverse_request.delete()
         messages.success(request, f"You are now friends with {to_user.username}")
     else:
-        # Create new request
         FriendRequest.objects.create(from_user=request.user, to_user=to_user)
         messages.success(request, "Friend request sent")
     
@@ -288,10 +286,8 @@ def send_friend_request(request, username):
 def accept_friend_request(request, request_id):
     friend_request = get_object_or_404(FriendRequest, id=request_id, to_user=request.user)
     
-    # Create friendship
     Friendship.objects.create(user1=friend_request.from_user, user2=friend_request.to_user)
     
-    # Delete the request
     friend_request.delete()
     
     messages.success(request, f"You are now friends with {friend_request.from_user.username}")
@@ -318,3 +314,12 @@ def remove_friend(request, username):
         messages.info(request, f"You are no longer friends with {friend.username}")
     
     return redirect('profile', username=username)
+
+@login_required
+def delete_post(request, post_id):
+    post = get_object_or_404(Post, id=post_id)
+
+    if request.user == post.user:  
+        post.delete()
+    
+    return redirect('profile',username=request.user.username)

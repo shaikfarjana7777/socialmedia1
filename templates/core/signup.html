@@ -1,36 +1,116 @@
 {% extends 'core/base.html' %}
+{% load static %}
 
 {% block content %}
-<div class="card">
-    <h2>Sign Up</h2>
-    <form method="POST" enctype="multipart/form-data">
-        {% csrf_token %}
-        <div class="form-group">
-            <label for="username">Username</label>
-            <input type="text" id="username" name="username" required>
+<style>
+    .center-container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        /* background: #fafafa; */
+    }
+
+    .gradient-border {
+        padding: 3px;
+        border-radius: 12px;
+        background: linear-gradient(135deg, #feda75, #fa7e1e, #d62976, #962fbf, #4f5bd5);
+    }
+
+    .card {
+        background: white;
+        border-radius: 10px;
+        padding: 20px;
+        width: 450px;
+        box-shadow: 0 0 12px rgba(0, 0, 0, 0.05);
+    }
+
+    .form-group {
+        margin-bottom: 15px;
+    }
+
+    .form-group input,
+    .form-group textarea {
+        width: 90%;
+        padding: 10px;
+        border: 1px solid #ccc;
+        border-radius: 6px;
+        margin: 0 auto;
+        display: block;
+    }
+
+    .btn {
+        width: 40%;
+        padding: 10px;
+        display: block;
+        margin: 0 auto;
+        background: linear-gradient(90deg, #feda75, #d62976, #962fbf, #4f5bd5);
+        border: none;
+        color: white;
+        border-radius: 6px;
+        font-weight: bold;
+        cursor: pointer;
+        transition: opacity 0.3s;
+    }
+
+    .btn:hover {
+        opacity: 0.9;
+    }
+
+    .logo-img {
+        width: 100%;
+        height: auto;
+        max-height: 100px;
+        object-fit: contain;
+        margin-bottom: 15px;
+    }
+
+    p {
+        text-align: center;
+        margin-top: 1rem;
+    }
+
+    a {
+        color: #d62976;
+        text-decoration: none;
+        font-weight: bold;
+    }
+
+    a:hover {
+        text-decoration: underline;
+    }
+</style>
+
+<div class="center-container">
+    <div class="gradient-border">
+        <div class="card">
+            <img src="{% static 'assets/instalogo.png' %}" alt="Signup" class="logo-img">
+
+            <form method="POST" enctype="multipart/form-data">
+                {% csrf_token %}
+                <div class="form-group">
+                    <input type="text" name="username" placeholder="Username" required>
+                </div>
+                <div class="form-group">
+                    <input type="email" name="email" placeholder="Email" required>
+                </div>
+                <div class="form-group">
+                    <input type="password" name="password" placeholder="Password" required>
+                </div>
+                <div class="form-group">
+                    <input type="password" name="password2" placeholder="Confirm Password" required>
+                </div>
+                <div class="form-group">
+                    <textarea name="bio" rows="3" placeholder="Bio"></textarea>
+                </div>
+                <div class="form-group">
+                    <input type="file" name="profile_pic" accept="image/jpeg,image/png">
+                </div>
+                <button type="submit" class="btn">Sign Up</button>
+            </form>
+
+            <p>Already have an account? <a href="{% url 'login' %}">Login</a></p>
         </div>
-        <div class="form-group">
-            <label for="email">Email</label>
-            <input type="email" id="email" name="email" required>
-        </div>
-        <div class="form-group">
-            <label for="password">Password</label>
-            <input type="password" id="password" name="password" required>
-        </div>
-        <div class="form-group">
-            <label for="password2">Confirm Password</label>
-            <input type="password" id="password2" name="password2" required>
-        </div>
-        <div class="form-group">
-            <label for="bio">Bio</label>
-            <textarea id="bio" name="bio" rows="3"></textarea>
-        </div>
-        <div class="form-group">
-            <label for="profile_pic">Profile Picture</label>
-            <input type="file" id="profile_pic" name="profile_pic" accept="image/jpeg,image/png">
-        </div>
-        <button type="submit" class="btn btn-primary">Sign Up</button>
-    </form>
-    <p>Already have an account? <a href="{% url 'login' %}">Login</a></p>
+    </div>
 </div>
 {% endblock %}

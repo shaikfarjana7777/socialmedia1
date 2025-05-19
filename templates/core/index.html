@@ -1,8 +1,29 @@
 {% extends 'core/base.html' %}
 
 {% block content %}
-<div class="card">
-    <h2>Welcome to Social Media</h2>
+<style>
+    .insta-card {
+        background: linear-gradient(90deg, #feda75, #fa7e1e, #d62976, #962fbf, #4f5bd5);
+        color: white;
+        padding: 20px;
+        border-radius: 12px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+        text-align: center;
+        margin-bottom: 20px;
+    }
+
+    .insta-card h2 {
+        margin-bottom: 10px;
+        font-size: 24px;
+    }
+
+    .insta-card p {
+        font-size: 16px;
+    }
+</style>
+
+<div class="insta-card">
+    <h2>Hello {{ request.user.username }}, welcome to Social Media</h2>
     <p>See what's happening with your friends</p>
 </div>
 

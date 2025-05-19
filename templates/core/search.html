@@ -1,36 +1,88 @@
 {% extends 'core/base.html' %}
 
 {% block content %}
-<div class="card">
-    <h2>Search Users</h2>
-    <form method="GET" action="{% url 'search' %}">
-        <div style="display: flex;">
-            <input type="text" name="q" value="{{ query }}" placeholder="Search by username or email" style="flex: 1; padding: 8px; border: 1px solid #ddd; border-radius: 4px 0 0 4px;">
-            <button type="submit" class="btn btn-primary" style="border-radius: 0 4px 4px 0;">Search</button>
-        </div>
-    </form>
+<style>
+.gradient-border-section {
+    padding: 2px;
+    border-radius: 15px;
+    background: linear-gradient(90deg, #405DE6, #5851DB, #833AB4, #C13584, #E1306C, #FD1D1D, #F56040, #F77737, #FCAF45, #FFDC80);
+    margin-bottom: 30px;
+}
+
+.gradient-border-section > .section-content {
+    background: white;
+    border-radius: 12px;
+    padding: 20px;
+}
+
+ul {
+    list-style: none;
+    padding-left: 0;
+}
+
+li {
+    padding: 10px 0;
+    border-bottom: 1px solid #eee;
+    display: flex;
+    align-items: center;
+}
+
+li:last-child {
+    border-bottom: none;
+}
+
+li img {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+.user-info {
+    margin-left: 10px;
+    flex: 1;
+}
+
+.btn-primary {
+    border-radius: 4px;
+}
+</style>
+
+<div class="gradient-border-section">
+    <div class="section-content">
+        <h2>Search Users</h2>
+        <form method="GET" action="{% url 'search' %}">
+            <div style="display: flex;">
+                <input type="text" name="q" value="{{ query }}" placeholder="Search by username or email" 
+                       style="flex: 1; padding: 8px; border: 1px solid #ddd; border-radius: 4px 0 0 4px;">
+                <button type="submit" class="btn btn-primary" style="border-radius: 0 4px 4px 0;">Search</button>
+            </div>
+        </form>
+    </div>
 </div>
 
 {% if query %}
-    <div class="card">
-        <h3>Results for "{{ query }}"</h3>
-        
-        {% if users %}
-            <ul style="list-style: none;">
-                {% for user in users %}
-                    <li style="padding: 10px 0; border-bottom: 1px solid #eee; display: flex; align-items: center;">
-                        <img src="{{ user.profile_pic.url }}" style="width: 40px; height: 40px; border-radius: 50%; object-fit: cover;">
-                        <div style="margin-left: 10px; flex: 1;">
-                            <a href="{% url 'profile' user.username %}"><strong>{{ user.username }}</strong></a>
-                            <p style="margin: 0; color: #666;">{{ user.email }}</p>
-                        </div>
-                        <a href="{% url 'profile' user.username %}" class="btn btn-primary">View Profile</a>
-                    </li>
-                {% endfor %}
-            </ul>
-        {% else %}
-            <p>No users found.</p>
-        {% endif %}
+    <div class="gradient-border-section">
+        <div class="section-content">
+            <h3>Results for "{{ query }}"</h3>
+            
+            {% if users %}
+                <ul>
+                    {% for user in users %}
+                        <li>
+                            <img src="{{ user.profile_pic.url }}" alt="{{ user.username }} profile picture">
+                            <div class="user-info">
+                                <a href="{% url 'profile' user.username %}"><strong>{{ user.username }}</strong></a>
+                                <p style="margin: 0; color: #666;">{{ user.email }}</p>
+                            </div>
+                            <a href="{% url 'profile' user.username %}" class="btn btn-primary">View Profile</a>
+                        </li>
+                    {% endfor %}
+                </ul>
+            {% else %}
+                <p>No users found.</p>
+            {% endif %}
+        </div>
     </div>
 {% endif %}
 {% endblock %}

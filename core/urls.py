@@ -21,4 +21,8 @@ urlpatterns = [
     path('remove-friend/<str:username>/', views.remove_friend, name='remove_friend'),
      path('friend-requests/', views.friend_requests_view, name='friend_requests'),
      path('friends/<str:username>/', views.friends_list_view, name='friends_list'),
+
+    path('post/<int:post_id>/delete/', views.delete_post, name='delete_post'),
+
+
 ]
