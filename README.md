@@ -1,4 +1,30 @@
-INSTA_CLONE USING DJANGO
+
+
+
+![Screenshot 2025-05-19 082952](https://github.com/user-attachments/assets/985ee6de-af32-4ec5-982a-5a067e626826)
+
+![Screenshot 2025-05-19 083033](https://github.com/user-attachments/assets/72bad2a0-8638-4c42-ac31-1c4de6e19351)
+
+![Screenshot 2025-05-19 083129](https://github.com/user-attachments/assets/e8b751d7-708a-4b19-afcc-135fa5ace43d)
+
+
+![Screenshot 2025-05-19 083230](https://github.com/user-attachments/assets/9d3df734-a6e5-40cd-a3c0-03bdca84538e)
+
+
+![Screenshot 2025-05-19 083323](https://github.com/user-attachments/assets/6e67fb5b-14bd-40c6-8481-b6102be9510d)
+
+
+![Screenshot 2025-05-19 083343](https://github.com/user-attachments/assets/f9b615cd-7b3b-472d-9c32-ad08d1463eed)
+
+![Screenshot 2025-05-19 083438](https://github.com/user-attachments/assets/30670d46-2c7c-45e4-a2a5-139734af229e)
+
+![Screenshot 2025-05-19 083627](https://github.com/user-attachments/assets/82a1fd22-f682-4093-b86e-75ace474f598)
+
+![Screenshot 2025-05-19 083800](https://github.com/user-attachments/assets/a9fb60f5-9d2d-43d4-9ccb-0cc8fef19535)
+
+![Screenshot 2025-05-19 084042](https://github.com/user-attachments/assets/3969f02d-41d2-4ec0-bd20-5fb057460352)
+
+INSTA_CLONING USING DJANGO
 ________________________________________________________________________________________________
 
 
