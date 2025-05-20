@@ -134,7 +134,7 @@ user_logout(request)
 
           Excludes the currently logged-in user from the results.
 
-🛠️ Models Used (Referenced in Code)
+🛠️ Models Used 
       
        User: Custom user model with profile fields.
 
